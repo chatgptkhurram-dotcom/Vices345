@@ -2,6 +2,8 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>VICES - Open World Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
 <style>
 .bub{position:fixed;z-index:3;background:#fff;color:#111;font-size:12px;font-weight:bold;padding:3px 8px;border-radius:10px;border:2px solid #000;pointer-events:none;transform:translate(-50%,-100%);max-width:170px;text-align:center;display:none}
 #bhk{display:none;right:24px;bottom:calc(200px + env(safe-area-inset-bottom,0px));width:60px;height:60px;background:#fc03}body.incar #bhk{display:flex}body.menu #bhk{display:none}
@@ -144,7 +146,121 @@ body.menu #dn,body.menu #dnb,body.cut #dn,body.cut #dnb{display:none!important}
 #vxtr{display:none;position:fixed;inset:0;background:#000d;z-index:11;align-items:center;justify-content:center}#vxtr .pb{border-color:#ffd23c}
 body.menu #vxr,body.menu #vxb,body.cut #vxr,body.cut #vxb{display:none!important}
 body.photo #hud,body.photo #mm,body.photo #mbox,body.photo .b,body.photo #joy,body.photo #wi,body.photo #spd,body.photo #clk,body.photo #dn,body.photo #hh,body.photo #vxr,body.photo #vxb,body.photo #xpt{display:none!important}
+
+/* ================= VICES NEON DASHBOARD UPGRADE ================= */
+:root{--pk:#ff3d9a;--cy:#2ee6ff;--vi:#8a3dff;--gd:#ffcf3a;--gr:#39ff88;--ink:#0b0618}
+#hud,#mo,#st,#spd,#mbox,#clk,#dn,#wi,#vxr,#hh,#fh,#bpz,#bsd,.mb,#ov h1,#lg h1{font-family:'Orbitron','Rajdhani',Arial,sans-serif}
+
+/* ---- health / armor / xp ---- */
+#hp{position:relative;width:150px;height:14px;background:linear-gradient(#0009,#000c);border:1px solid #39ff8899;border-radius:2px 8px 2px 8px;overflow:hidden;box-shadow:0 0 10px #39ff8844,inset 0 0 6px #000}
+#hpb{background:linear-gradient(90deg,#ff2d55,#ffcf3a 50%,#39ff88);background-size:148px 100%;transition:width .25s;box-shadow:0 0 8px #fff6}
+#hp.low{animation:vw-low .6s infinite alternate;border-color:#ff2d55}
+@keyframes vw-low{from{box-shadow:0 0 4px #ff2d5566}to{box-shadow:0 0 16px #ff2d55}}
+#hpn,#arn{position:absolute;right:5px;top:0;font-size:9px;line-height:14px;font-weight:700;text-shadow:0 1px 2px #000;letter-spacing:1px}
+#arm{position:relative;width:150px;height:8px;background:#000a;border:1px solid #2ee6ff88;border-radius:2px 6px 2px 6px;overflow:hidden}
+#armb{background:linear-gradient(90deg,#1b6dff,#2ee6ff);transition:width .25s;box-shadow:0 0 8px #2ee6ff}
+#arn{line-height:8px;font-size:7px}
+#xpw{height:15px;border:1px solid #b46bff99;border-radius:2px 6px 2px 6px;background:#000a}
+#xpb{background:linear-gradient(90deg,#7a35ff,#ff3d9a);box-shadow:0 0 10px #ff3d9a99}
+#xpl{font-size:9px;line-height:15px;letter-spacing:1px}
+
+/* ---- money + wanted ---- */
+#mo{font-size:26px;font-weight:900;color:#7dffb0;letter-spacing:1px;text-shadow:0 0 6px #39ff88,0 0 18px #39ff8888,0 2px 2px #000;transition:transform .15s}
+#mo.up{animation:vw-up .5s}#mo.dn2{animation:vw-dn .5s}
+@keyframes vw-up{0%{transform:scale(1.25);color:#fff}100%{transform:scale(1)}}
+@keyframes vw-dn{0%{transform:scale(1.15);color:#ff5577;text-shadow:0 0 14px #f25}100%{transform:scale(1)}}
+#st{font-size:20px;letter-spacing:3px;color:#ffcf3a;text-shadow:0 0 8px #ffcf3a99,0 1px 2px #000}
+body.wanted #st{animation:vw-st .5s infinite alternate}
+@keyframes vw-st{from{color:#ff2d55;text-shadow:0 0 6px #ff2d55}to{color:#3da0ff;text-shadow:0 0 14px #3da0ff}}
+
+/* ---- police heat vignette ---- */
+#vw-heat{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity .5s;box-shadow:inset 0 0 120px 10px #ff1a4a;animation:vw-heat .7s steps(1) infinite}
+body.wanted #vw-heat{opacity:.55}body.menu #vw-heat,body.cut #vw-heat{opacity:0!important}
+@keyframes vw-heat{0%{box-shadow:inset 0 0 120px 10px #ff1a4a}50%{box-shadow:inset 0 0 120px 10px #2a6bff}}
+#vw-vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 62%,#1a003a55 100%)}
+body.menu #vw-vig{display:none}
+
+/* ---- speedometer gauge ---- */
+#spd{width:132px;height:132px;border-radius:50%;padding-top:40px;bottom:calc(60px + env(safe-area-inset-bottom,0px));font-size:34px;line-height:1;font-weight:900;border:0;
+ background:radial-gradient(circle,#150a2ae6 0,#0a0414f2 70%);box-shadow:0 0 22px #8a3dff77,inset 0 0 18px #000;--p:0;--c:#2ee6ff;text-shadow:0 0 12px var(--c)}
+#spd small{display:block;font-size:9px;letter-spacing:3px;color:#b9a9ff;margin-top:3px;text-shadow:none}
+#spd::before{content:"";position:absolute;inset:3px;border-radius:50%;
+ background:conic-gradient(from 225deg,var(--c) 0,var(--c) calc(var(--p)*270deg),#ffffff1c calc(var(--p)*270deg),#ffffff1c 270deg,transparent 270deg);
+ -webkit-mask:radial-gradient(circle,transparent 52px,#000 53px,#000 62px,transparent 63px);mask:radial-gradient(circle,transparent 52px,#000 53px,#000 62px,transparent 63px);filter:drop-shadow(0 0 5px var(--c))}
+#spd::after{content:"";position:absolute;inset:14px;border-radius:50%;border:1px dashed #ffffff22}
+@media(max-width:700px){#spd{width:110px;height:110px;padding-top:32px;font-size:28px}
+ #spd::before{-webkit-mask:radial-gradient(circle,transparent 43px,#000 44px,#000 52px,transparent 53px);mask:radial-gradient(circle,transparent 43px,#000 44px,#000 52px,transparent 53px)}}
+
+/* ---- minimap ---- */
+#mm{border:0;background:#05020c99;box-shadow:0 0 0 3px #0b0618,0 0 0 5px var(--pk),0 0 22px #ff3d9a88,inset 0 0 14px #000}
+
+/* ---- mission card ---- */
+#mbox{background:linear-gradient(135deg,#1a0833ee,#0a0414ee);border:1px solid #ff3d9a88;border-left:4px solid var(--gd);border-radius:0 14px 0 14px;box-shadow:0 0 18px #ff3d9a44;backdrop-filter:blur(4px)}
+#mtitle{color:var(--gd);letter-spacing:2px;font-size:12px;text-shadow:0 0 8px #ffcf3a88}
+#mobj{font-family:Arial,sans-serif}#minfo{color:var(--cy)}
+
+/* ---- chips ---- */
+#clk,#dn{background:linear-gradient(90deg,#1a0833dd,#0a0414dd);border:1px solid #8a3dff88;border-radius:3px 12px 3px 12px;color:#e9dcff;letter-spacing:1px;box-shadow:0 0 10px #8a3dff44}
+#dn{color:var(--gd);font-size:11px}
+#dnb{font-family:'Orbitron',Arial,sans-serif;font-weight:900;letter-spacing:10px;text-shadow:0 0 10px currentColor,0 0 30px currentColor,0 3px 8px #000}
+#wi{background:linear-gradient(90deg,#1a0833dd,#0a0414dd);border:1px solid var(--cy);border-radius:4px 14px 4px 14px;color:#dff9ff;letter-spacing:1px;box-shadow:0 0 14px #2ee6ff55}
+#vxr,#hh{border-radius:4px 14px;box-shadow:0 0 16px #ffcf3a66;letter-spacing:1px}
+#bpz,#bsd{border-radius:4px 12px;border:1px solid #8a3dff;background:#1a0833dd;box-shadow:0 0 10px #8a3dff55}
+#bsd{color:var(--gr);border-color:var(--gr);background:#06210fdd}
+#vxb button{border:1px solid #8a3dff;background:#1a0833cc;box-shadow:0 0 8px #8a3dff55}
+
+/* ---- touch buttons ---- */
+.b{background:radial-gradient(circle at 35% 30%,#ffffff33,#ffffff0d);backdrop-filter:blur(3px);border:2px solid #ffffff55;box-shadow:0 0 14px #8a3dff66,inset 0 0 12px #ffffff18;font-family:'Orbitron',Arial,sans-serif;letter-spacing:1px;transition:transform .08s,box-shadow .08s}
+.b:active{transform:scale(.92);box-shadow:0 0 24px #ff3d9a}
+#bf{border-color:#ff3d9a;box-shadow:0 0 18px #ff3d9a99,inset 0 0 14px #ff3d9a55}
+#joy{background:radial-gradient(circle,#ffffff10,#8a3dff22);border:2px solid #8a3dffaa;box-shadow:0 0 18px #8a3dff55,inset 0 0 18px #0006}
+#knob{background:radial-gradient(circle at 35% 30%,#fff,#b46bff);box-shadow:0 0 14px #b46bff}
+
+/* ---- panels (shop, settings, pause...) ---- */
+#sp,.pb{background:linear-gradient(160deg,#1a0833,#0a0414);border:1px solid #ff3d9a;border-radius:4px 22px 4px 22px;box-shadow:0 0 30px #ff3d9a55,0 0 0 4px #0b0618}
+#sp h2,.pb h2{font-family:'Orbitron',Arial,sans-serif;color:var(--pk);text-shadow:0 0 10px #ff3d9a88}
+#sp button,.pb button{border-radius:3px 10px;background:linear-gradient(135deg,#ff3d9a,#8a3dff);box-shadow:0 0 10px #ff3d9a55}
+#sp button.no,.pb button.no{background:#3a3445;box-shadow:none}
+#sp button#sx,.pb button.px{background:linear-gradient(135deg,#ff2d55,#8a1d4a)}
+.sm{color:var(--gr);text-shadow:0 0 8px #39ff8855}
+
+/* ---- main menu / login ---- */
+#vw-bg{position:fixed;inset:0;width:100%;height:100%;z-index:7;display:none;pointer-events:none}
+body.menu #vw-bg{display:block}
+#ov{background:linear-gradient(#0000,#0000 40%,#0b061899)}
+#lg{background:linear-gradient(#0b0618aa,#0b0618dd)}
+#ov h1,#lg h1{font-size:clamp(46px,13vw,104px);font-weight:900;letter-spacing:.12em;margin:0 0 6px;line-height:1;
+ background:linear-gradient(#fff0f8 0,#ff7ac0 40%,#ff3d9a 52%,#8a3dff 53%,#2ee6ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+ filter:drop-shadow(0 0 14px #ff3d9acc) drop-shadow(0 4px 0 #2a0a55);animation:vw-glitch 5s infinite;text-shadow:none}
+#ov h1::after,#lg h1::after{content:"OPEN WORLD  LOS SANTOS";display:block;font-size:12px;letter-spacing:.7em;margin-top:10px;color:var(--cy);-webkit-text-fill-color:var(--cy);filter:none;text-shadow:0 0 10px var(--cy)}
+@keyframes vw-glitch{0%,92%,100%{transform:none}93%{transform:translate(-4px,1px) skewX(6deg)}94%{transform:translate(5px,-1px) skewX(-6deg)}95%{transform:none}96%{transform:translate(-2px,0)}}
+#ov>div:first-of-type{color:#d9c9ff!important;font-size:11px;letter-spacing:1px;max-width:620px;margin-bottom:10px!important;font-family:Arial,sans-serif}
+#who{display:inline-block;padding:5px 18px;border:1px solid var(--gr);border-radius:3px 12px;background:#06210f99;color:var(--gr);letter-spacing:2px;text-shadow:0 0 8px #39ff8866;margin-bottom:6px}
+.mb{position:relative;border:0;border-radius:0;clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);padding:15px 0;font-size:19px;letter-spacing:4px;
+ box-shadow:none;text-shadow:0 2px 0 #0006;transition:transform .15s,filter .15s;overflow:hidden}
+.mb::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,#ffffff66,transparent);transform:skewX(-20deg);transition:left .5s}
+.mb:hover{transform:translateX(8px) scale(1.03);filter:brightness(1.25) saturate(1.2)}
+.mb:hover::after{left:130%}
+.mb:active{transform:scale(.97)}
+#go{background:linear-gradient(135deg,#ff3d9a,#ff8a1a)!important;font-size:24px;padding:17px 0;animation:vw-pulse 1.6s infinite}
+@keyframes vw-pulse{0%,100%{filter:drop-shadow(0 0 4px #ff3d9a)}50%{filter:drop-shadow(0 0 16px #ff3d9a)}}
+#lg .lgb{background:linear-gradient(160deg,#1a0833ee,#0a0414ee);border:1px solid var(--pk);border-radius:4px 22px 4px 22px;box-shadow:0 0 30px #ff3d9a55}
+#lg input{border:1px solid #8a3dff;background:#07030fcc;border-radius:3px 10px}
+#lg input:focus{outline:0;border-color:var(--cy);box-shadow:0 0 12px #2ee6ff77}
+#lg .tabs button.on{background:linear-gradient(135deg,#ff3d9a,#8a3dff)}
+.hint,.sr small{color:#a99cd0}
+@media(prefers-reduced-motion:reduce){#ov h1,#lg h1,#go,body.wanted #st,#vw-heat,#hp.low{animation:none}}
+
+/* ================= VICES NEON GRAPHICS LAYER ================= */
+#vw-bloom{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(9px) brightness(1.35) contrast(1.55) saturate(1.7);opacity:.3}
+#vw-grade{position:fixed;inset:0;pointer-events:none;mix-blend-mode:soft-light;background:linear-gradient(180deg,#2ee6ff55 0,#0000 38%,#ff3d9a66 100%)}
+#vw-speed{position:fixed;inset:0;pointer-events:none;opacity:0;
+ background:repeating-conic-gradient(from 0deg at 50% 50%,#fff0 0 2.2deg,#ffffff30 2.2deg 2.8deg);
+ -webkit-mask:radial-gradient(circle at 50% 50%,transparent 38%,#000 92%);mask:radial-gradient(circle at 50% 50%,transparent 38%,#000 92%)}
+body.menu #vw-bloom,body.menu #vw-grade,body.menu #vw-speed,body.cut #vw-speed,body.nogfx #vw-bloom,body.nogfx #vw-grade,body.nogfx #vw-speed{display:none}
 </style></head><body class="menu">
+<div id="vw-heat"></div><div id="vw-vig"></div><canvas id="vw-bg"></canvas>
+
 <div class="cbar" id="cutbar1"></div><div class="cbar" id="cutbar2"></div><div id="cutfade"></div><div id="cuttxt"></div><div id="cutskip">HOLD to skip</div>
 <div id="hud"><div><div id="hp"><div id="hpb"></div></div><div id="arm"><div id="armb"></div></div><div id="xpw" title="Character &amp; skills (K)"><div id="xpb"></div><span id="xpl"></span></div><div id="st"></div></div><div id="mo"></div></div>
 <canvas id="mm" width="260" height="260"></canvas>
@@ -169,6 +285,7 @@ body.photo #hud,body.photo #mm,body.photo #mbox,body.photo .b,body.photo #joy,bo
 <div class="sr" style="display:block"><div>Look sensitivity</div><input type="range" id="sens" min="0.4" max="2.5" step="0.1" value="1"></div>
 <div style="color:#ccd;font-size:12px;margin-top:8px;line-height:1.5"><b>Controls</b><br><b style="color:#ffd23c">RPG: K = character &amp; skills (or tap the purple XP bar). Walk up to a house gate and press E / ENTER to buy it, then go inside: sleep, safe, gun locker, upgrades.</b><br>PC: WASD move, Shift run, Space jump, click screen to capture mouse (mouse = look, left click = FIRE, or hold F), E enter / exit car, M big map, <b>Q weapon menu (buy guns here)</b>, <b>T send money to friends</b>, P pause, R radio (in a car), walk into the blue ATM / yellow GARAGE / pink STYLE SHOP ( skin, hair, clothes, shoes, hat, shades) / white HOSPITAL markers. If you get wasted you wake up at a hospital (bill $200). A day lasts 6 minutes - the clock is next to your health bar, keys 1-6 pick owned gun. <b>Crash any car 3 times and it EXPLODES!</b> Fire trucks rush to put out the fire. Police cars come from police stations. Drive a car into the orange GARAGE to paint / tune / armor it. Press G (or HONK) in a car for a funny horn. Shoot near people and they scream and run, some dance, some wear clown wigs. In a police car, ambulance or fire truck press H (or the SIREN button) for the siren.<br>Mobile: left stick move, drag screen to look, FIRE / JUMP / ENTER / MAP / GUNS buttons, SEND MONEY button on the left.<br>Follow the yellow marker to start a mission. Green marker = gun shop. Hurt people and police chase you.</div>
 <div style="color:#8cf;font-size:12px;margin-top:6px;line-height:1.5"><b>Aircraft</b> (AIRPORT on the east beach, cyan beam)<br>Walk to a plane/heli, press E / ENTER. Heli: W/S fly, A/D turn, Space/&#9650; up, Shift/&#9660; down. Plane: W/S throttle, A/D turn, Space/&#9650; climb, Shift/&#9660; dive. Take off at 35+ m/s, land gently, then E to exit.</div>
+<div class="sr"><div>Neon graphics (glow, sunset, underglow)</div><button id="gfxb">ON</button></div>
 <button class="px" id="rst" style="background:#733">RESET SAVE (new game)</button><button class="px" id="setx">BACK</button></div></div>
 <div class="pn" id="adm" style="z-index:13"><div class="pb" id="admb"></div></div>
 <div class="pn" id="cht" style="z-index:11"><div class="pb" id="chb"></div></div>
@@ -2459,4 +2576,139 @@ function loop(now){requestAnimationFrame(loop);if(BANNED){last=now;return}const 
  else{drawMini(t);markerUI(t);mboxUI(t)}
  luTick(t,dt);worldGuard();perfTick(dt);R.render(S,C)}
 requestAnimationFrame(loop);
-</script></body></html>
+</script><script>
+/* VICES neon dashboard layer: visual only, never touches game state */
+(function(){try{
+const $=id=>document.getElementById(id),B=document.body;
+
+/* --- HP / armor numbers --- */
+const hp=$('hp'),hpb=$('hpb'),arm=$('arm'),armb=$('armb');
+const hpn=document.createElement('span');hpn.id='hpn';hp.appendChild(hpn);
+const arn=document.createElement('span');arn.id='arn';arm.appendChild(arn);
+
+/* --- speedometer --- */
+const spd=$('spd');let lastMoney=null,lastP=-1;
+function tick(){
+  if(spd.style.display!=='none'){
+    const v=parseInt(spd.textContent)||0,p=Math.min(1,v/240);
+    if(Math.abs(p-lastP)>.004){lastP=p;spd.style.setProperty('--p',p.toFixed(3));
+      const h=185+p*155; /* cyan -> violet -> hot pink/red */
+      spd.style.setProperty('--c','hsl('+(h%360)+',100%,'+(60-p*8)+'%)')}
+  }
+  /* bars */
+  const hw=parseFloat(hpb.style.width)||0,aw=parseFloat(armb.style.width)||0;
+  hpn.textContent=Math.round(hw);arn.textContent=aw>0?Math.round(aw):'';
+  hp.classList.toggle('low',hw>0&&hw<30);
+  /* wanted level */
+  B.classList.toggle('wanted',($('st').textContent||'').indexOf('\u2605')>-1);
+  /* money pop */
+  const m=$('mo').textContent;
+  if(lastMoney!==null&&m!==lastMoney){
+    const a=parseInt(m.slice(1))||0,b=parseInt(lastMoney.slice(1))||0,mo=$('mo');
+    mo.classList.remove('up','dn2');void mo.offsetWidth;mo.classList.add(a>=b?'up':'dn2')}
+  lastMoney=m;
+  requestAnimationFrame(tick)}
+tick();
+
+/* --- animated synthwave backdrop for menu / login --- */
+const cv=$('vw-bg'),g=cv.getContext('2d');let W=0,H=0,stars=[],city=[];
+function size(){const s=Math.min(1,(innerWidth>900?.75:1));W=cv.width=Math.max(320,innerWidth*s|0);H=cv.height=Math.max(320,innerHeight*s|0);
+  stars=Array.from({length:90},()=>({x:Math.random()*W,y:Math.random()*H*.5,r:Math.random()*1.4+.3,t:Math.random()*6}));
+  city=[];let x=0;while(x<W){const w=14+Math.random()*34,h=H*(.04+Math.random()*.16);city.push({x,w,h,l:Math.random()});x+=w+Math.random()*4}}
+size();addEventListener('resize',size);
+function frame(now){
+  requestAnimationFrame(frame);
+  if(!B.classList.contains('menu'))return;
+  const t=now/1000,hz=H*.6;
+  /* sky */
+  let sk=g.createLinearGradient(0,0,0,hz);sk.addColorStop(0,'#0b0524');sk.addColorStop(.55,'#4a0f7a');sk.addColorStop(.85,'#ff3d9a');sk.addColorStop(1,'#ffb25a');
+  g.fillStyle=sk;g.fillRect(0,0,W,hz+1);
+  for(const s of stars){g.globalAlpha=.4+.6*Math.abs(Math.sin(t*1.5+s.t));g.fillStyle='#fff';g.fillRect(s.x,s.y,s.r,s.r)}g.globalAlpha=1;
+  /* sun with sliding stripes */
+  const R=Math.min(W,H)*.24,cx=W/2,cy=hz-R*.5;
+  g.save();g.beginPath();g.arc(cx,cy,R,0,7);g.clip();
+  const sg=g.createLinearGradient(0,cy-R,0,cy+R);sg.addColorStop(0,'#ffe86a');sg.addColorStop(.5,'#ff8a3d');sg.addColorStop(1,'#ff2d8a');g.fillStyle=sg;
+  const off=(t*14)%1;
+  for(let y=cy-R;y<cy+R;y+=1){const k=(y-(cy-R))/(2*R);const gap=.04+k*.09;const ph=((k*9)+off*0)%1;
+    if(k>.38&&((k*14-t*.6)%1)<gap*6)continue;g.fillRect(cx-R,y,2*R,1.5)}
+  g.restore();
+  /* skyline */
+  for(const b of city){g.fillStyle='#12041f';g.fillRect(b.x,hz-b.h,b.w,b.h+1);g.fillStyle='#ff3d9a';g.globalAlpha=.55;g.fillRect(b.x,hz-b.h,b.w,1.5);g.globalAlpha=1;
+    if(b.l>.55){g.fillStyle='#2ee6ff';g.globalAlpha=.5+.4*Math.sin(t*2+b.x);g.fillRect(b.x+b.w*.3,hz-b.h*.7,2,2);g.fillRect(b.x+b.w*.6,hz-b.h*.4,2,2);g.globalAlpha=1}}
+  /* ground */
+  const gg=g.createLinearGradient(0,hz,0,H);gg.addColorStop(0,'#1a0533');gg.addColorStop(1,'#07020f');g.fillStyle=gg;g.fillRect(0,hz,W,H-hz);
+  g.strokeStyle='#ff3d9a';g.lineWidth=1.4;g.globalAlpha=.85;
+  g.beginPath();
+  for(let i=-24;i<=24;i++){g.moveTo(cx+i*8,hz);g.lineTo(cx+i*W*.12,H)}
+  const sc=(t*.35)%1;
+  for(let i=0;i<14;i++){const z=(i+sc)/14,y=hz+(H-hz)*z*z;g.moveTo(0,y);g.lineTo(W,y)}
+  g.stroke();g.globalAlpha=1;
+  /* horizon glow */
+  const hg=g.createLinearGradient(0,hz-6,0,hz+22);hg.addColorStop(0,'#ff3d9a00');hg.addColorStop(.3,'#ff3d9acc');hg.addColorStop(1,'#ff3d9a00');g.fillStyle=hg;g.fillRect(0,hz-6,W,28);
+  /* soft scanlines */
+  g.fillStyle='#0000002a';for(let y=0;y<H;y+=3)g.fillRect(0,y,W,1);
+}
+requestAnimationFrame(frame);
+}catch(e){console.warn('Vices UI layer:',e)}})();
+</script>
+<script>
+/* VICES neon graphics: sunset/night grading, filmic tone mapping, bloom glow, car underglow, speed streaks. Visual only. */
+(function(){try{
+const B=document.body,$=id=>document.getElementById(id);
+let GFX=1;try{GFX=localStorage.getItem('vices_gfx')==='0'?0:1}catch(e){}
+function applyGfx(){B.classList.toggle('nogfx',!GFX);const b=$('gfxb');if(b)b.textContent=GFX?'\u2728 ON':'OFF';
+  R.toneMapping=GFX?T.ACESFilmicToneMapping:T.NoToneMapping;R.toneMappingExposure=1.2;
+  S.traverse(o=>{if(o.material){const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>m.needsUpdate=true)}})}
+const gb=$('gfxb');if(gb)gb.onclick=()=>{GFX=GFX?0:1;try{localStorage.setItem('vices_gfx',GFX)}catch(e){}applyGfx()};
+
+/* overlays */
+const grade=document.createElement('div');grade.id='vw-grade';
+const speed=document.createElement('div');speed.id='vw-speed';
+const bl=document.createElement('canvas');bl.id='vw-bloom';
+const bctx=bl.getContext('2d');
+function bsize(){bl.width=176;bl.height=Math.max(60,Math.round(176*innerHeight/innerWidth))}bsize();addEventListener('resize',bsize);
+R.domElement.after(bl,grade,speed);
+
+/* base light colours */
+const hemi0=hemi.color.clone(),sun0=sun.color.clone();
+const cDusk=new T.Color(0xff6f9f),cNight=new T.Color(0x2a0b58),cWarm=new T.Color(0xffb0d0),cCool=new T.Color(0x8a7dff),cSun=new T.Color(0xff9a5a);
+const E=Math.exp;
+
+/* underglow */
+const gt2=document.createElement('canvas');gt2.width=gt2.height=64;
+{const x=gt2.getContext('2d'),g=x.createRadialGradient(32,32,2,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.55,'rgba(255,255,255,.55)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,64,64)}
+const gtex=new T.CanvasTexture(gt2);
+const glow=new T.Mesh(new T.PlaneGeometry(5.2,8.4),new T.MeshBasicMaterial({map:gtex,color:0xff3d9a,transparent:true,blending:T.AdditiveBlending,depthWrite:false,fog:false,opacity:.4}));
+glow.rotation.x=-Math.PI/2;glow.position.y=.14;glow.renderOrder=2;glow.frustumCulled=false;
+let glowCar=null,fr=0;
+
+const origRender=R.render.bind(R);
+R.render=function(s,c){
+  if(GFX){
+    const g=gt,d=Math.min(1,Math.max(0,Math.sin((g-6)/24*2*Math.PI)*1.6+.3));
+    const w=Math.max(E(-Math.pow((g-18.8)/1.3,2)),E(-Math.pow((g-6.2)/.9,2)));
+    const rw=(typeof VX!=='undefined'&&VX.rw)||0;
+    S.background.lerp(cNight,.55*(1-d)).lerp(cDusk,.62*w*(1-.7*rw));
+    S.fog.color.copy(S.background);
+    hemi.color.copy(hemi0).lerp(cWarm,.6*w).lerp(cCool,.5*(1-d));
+    sun.color.copy(sun0).lerp(cSun,.85*w);
+    R.toneMappingExposure=1.18+.18*w;
+    /* bloom strength: stronger at night/dusk */
+    bl.style.opacity=(.18+.34*(1-d)+.12*w).toFixed(2);
+    grade.style.opacity=(.55+.35*w).toFixed(2);
+    /* underglow on whatever car you drive */
+    const car=P.car;
+    if(car!==glowCar){if(glow.parent)glow.parent.remove(glow);glowCar=car;if(car&&car.g&&!car.air&&!car.boat)car.g.add(glow)}
+    if(glow.parent){const t=performance.now()/1000;glow.material.color.setHSL(.5+.42*(.5+.5*Math.sin(t*.9)),1,.55);glow.material.opacity=.18+.62*(1-d)}
+    /* speed streaks */
+    const v=parseInt($('spd').textContent)||0,sh=$('spd').style.display!=='none';
+    speed.style.opacity=sh?Math.min(.55,Math.max(0,(v-95)/220)).toFixed(2):0;
+  }
+  origRender(s,c);
+  if(GFX&&!B.classList.contains('menu')&&!B.classList.contains('cut')&&(++fr&1)){
+    try{bctx.drawImage(R.domElement,0,0,bl.width,bl.height)}catch(e){}}
+};
+applyGfx();
+}catch(e){console.warn('Vices graphics layer:',e)}})();
+</script>
+</body></html>
