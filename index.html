@@ -279,7 +279,7 @@ body.menu #vw-bloom,body.menu #vw-grade,body.menu #vw-speed,body.cut #vw-speed,b
 <div class="b" id="bf">FIRE</div><div class="b" id="ba">ENTER</div><div class="b" id="bm">MAP</div><div class="b" id="bw">GUNS</div><div class="b" id="bj">JUMP</div>
 <div class="b" id="bhk">HONK<br>(G)</div><div class="b" id="bnt">NITRO<br>(Shift)</div><div class="b" id="bsr">SIREN<br>(H)</div><div class="b" id="bup">&#9650;<br>UP</div><div class="b" id="bdn">&#9660;<br>DOWN</div><div id="fh"></div>
 <div id="fm"><canvas id="fmc" width="600" height="600"></canvas>
-<div>Yellow = mission start &nbsp; Pink = objective &nbsp; Blue = car/boat &nbsp; Green = gun shop &nbsp; Red/Blue flash = police &nbsp; &#128659; Police station &nbsp; &#128658; Fire station &nbsp; Cyan P/H = plane/heli &nbsp; &#127973; White = hospital &nbsp; Pink S = style shop &nbsp; Yellow G = GARAGE (cars + helicopter) &nbsp; Orange C = customs &nbsp; Lime H = your house &nbsp; Small dot = house for sale &nbsp; White arrow = you</div>
+<div>Yellow = mission start &nbsp; Pink = objective &nbsp; Blue = car/boat &nbsp; Green = gun shop &nbsp; Red/Blue flash = police &nbsp; &#128659; Police station &nbsp; &#128658; Fire station &nbsp; Cyan P/H = plane/heli &nbsp; Orange T = train station &nbsp; &#127973; White = hospital &nbsp; Pink S = style shop &nbsp; Yellow G = GARAGE (cars + helicopter) &nbsp; Orange C = customs &nbsp; Lime H = your house &nbsp; Small dot = house for sale &nbsp; White arrow = you</div>
 <div>Tap or press M to close</div></div>
 <div id="ww"><div id="wring"><div id="wc"></div></div></div>
 <div id="shop"><div id="sp"></div></div>
@@ -291,7 +291,7 @@ body.menu #vw-bloom,body.menu #vw-grade,body.menu #vw-speed,body.cut #vw-speed,b
 <div class="sr"><div>Sound</div><button id="snb">&#128266; ON</button></div>
 <div class="sr" style="display:block"><div>Look sensitivity</div><input type="range" id="sens" min="0.4" max="2.5" step="0.1" value="1"></div>
 <div style="color:#ccd;font-size:12px;margin-top:8px;line-height:1.5"><b>Controls</b><br><b style="color:#ffd23c">RPG: K = character &amp; skills (or tap the purple XP bar). Walk up to a house gate and press E / ENTER to buy it, then go inside: sleep, safe, gun locker, upgrades.</b><br>PC: WASD move, Shift run, Space jump, click screen to capture mouse (mouse = look, left click = FIRE, or hold F), E enter / exit car, M big map, <b>Q weapon menu (buy guns here)</b>, <b>T send money to friends</b>, P pause, R radio (in a car), walk into the blue ATM / yellow GARAGE / pink STYLE SHOP ( skin, hair, clothes, shoes, hat, shades) / white HOSPITAL markers. If you get wasted you wake up at a hospital (bill $200). A day lasts 6 minutes - the clock is next to your health bar, keys 1-6 pick owned gun. <b>Crash any car 3 times and it EXPLODES!</b> Fire trucks rush to put out the fire. Police cars come from police stations. Drive a car into the orange GARAGE to paint / tune / armor it. Press G (or HONK) in a car for a funny horn. Shoot near people and they scream and run, some dance, some wear clown wigs. In a police car, ambulance or fire truck press H (or the SIREN button) for the siren.<br>Mobile: left stick move, drag screen to look, FIRE / JUMP / ENTER / MAP / GUNS buttons, SEND MONEY button on the left.<br>Follow the yellow marker to start a mission. Green marker = gun shop. Hurt people and police chase you.</div>
-<div style="color:#8cf;font-size:12px;margin-top:6px;line-height:1.5"><b>Aircraft</b> (AIRPORT on the east beach, cyan beam)<br>Walk to a plane/heli, press E / ENTER. Heli: W/S fly, A/D turn, Space/&#9650; up, Shift/&#9660; down. Plane: W/S throttle, A/D turn, Space/&#9650; climb, Shift/&#9660; dive. Take off at 35+ m/s, land gently, then E to exit.</div>
+<div style="color:#8cf;font-size:12px;margin-top:6px;line-height:1.5"><b>Aircraft</b> (AIRPORT on the east beach, cyan beam)<br>Walk to a plane/heli, press E / ENTER. Heli: W/S fly, A/D turn, Space/&#9650; up, Shift/&#9660; down. Plane: W/S throttle, A/D turn, Space/&#9650; climb, Shift/&#9660; dive. Take off at 35+ m/s, land gently, then E to exit.</div><div style="color:#fb8;font-size:12px;margin-top:6px;line-height:1.5"><b>Train</b> (elevated line, orange T stations)<br>Walk to a station tower (orange beam), wait for the train, press E to board. Walk inside the train; E near a seat to sit. Go to the driver seat at the front and press E: the driver gets out, press E again to sit and drive (W speed up, S / Space brake, E leave seat). Stop at a station and press E to get off.</div>
 <div class="sr"><div>Neon graphics (glow, sunset, underglow)</div><button id="gfxb">ON</button></div>
 <button class="px" id="rst" style="background:#733">RESET SAVE (new game)</button><button class="px" id="setx">BACK</button></div></div>
 <div class="pn" id="adm" style="z-index:13"><div class="pb" id="admb"></div></div>
@@ -675,6 +675,7 @@ function openShop(){unlockMouse();shopOpen=1;fireOn=0;jx=jy=0;smsg='';renderShop
 function closeShop(){if(styleOpen){styleOpen=0;pend={};applyLook()}$('snd').classList.remove('side');garCar=null;gLock=1;shopOpen=0;shopLock=1;lkx=P.x;lkz=P.z;$('shop').style.display='none';$('snd').style.display='none';$('pz').style.display='none';$('cht').style.display='none';if(document.activeElement)document.activeElement.blur()}
 
 function act(){if(P.dead||!started||wheelOpen||shopOpen)return;
+ if(trainAct())return;
  if(homeAct())return;
  if(P.car){const c=P.car;if((c.fy||0)>1.5){bailOut();return}if(c.air&&!airExit(c))return;c.sOn=0;P.x=c.x-cos(c.a)*(c.air?c.ex:3);P.z=c.z+sin(c.a)*(c.air?c.ex:3);P.car=null;P.g.visible=true;return}
  let ab=null,ad=9;for(const q of AIR){const d=Math.hypot(q.x-P.x,q.z-P.z);if(d<ad&&P.y<2.5){ad=d;ab=q}}if(ab){P.car=ab;P.g.visible=false;airEnter(ab);return}
@@ -799,21 +800,21 @@ function drawFull(t){
  c.fillStyle='#000';c.font='bold 11px Arial';c.textAlign='center';c.textBaseline='middle';
  for(const q of HOM){if(q.gone)continue;if(q.own){dot(c,X(q.dx),Z(q.dz),'#b6ff00',8);c.fillStyle='#000';c.fillText('H',X(q.dx),Z(q.dz)+1)}else dot(c,X(q.dx),Z(q.dz),'#cfe8a8',3.5)}
  for(const s of SHOPS){dot(c,X(s.x),Z(s.z),'#3d3',8);c.fillStyle='#000';c.fillText('$',X(s.x),Z(s.z)+1)}for(const s of STN){dot(c,X(s.x),Z(s.z),hex(s.c),8);c.fillStyle='#000';c.fillText(s.k||s.l[0],X(s.x),Z(s.z)+1)}
- for(const q of cops)if(q.on)dot(c,X(q.x),Z(q.z),fl?'#f22':'#26f',6);for(const q of AIR){dot(c,X(q.x),Z(q.z),'#6df',8);c.fillStyle='#000';c.font='bold 11px Arial';c.fillText(q.heli?'H':'P',X(q.x),Z(q.z)+1)}
+ for(const q of cops)if(q.on)dot(c,X(q.x),Z(q.z),fl?'#f22':'#26f',6);for(const q of AIR){dot(c,X(q.x),Z(q.z),'#6df',8);c.fillStyle='#000';c.font='bold 11px Arial';c.fillText(q.heli?'H':'P',X(q.x),Z(q.z)+1)}trainMap(c,X,Z);
  const g=tgt();
  if(g){dot(c,X(g.x),Z(g.z),hex(g.col),10);c.fillStyle='#000';c.font='bold 13px Arial';c.textAlign='center';c.textBaseline='middle';c.fillText(mact?'!':'M',X(g.x),Z(g.z)+1)}
  const hd=P.car?P.car.a:P.ang;arrow(c,X(P.x),Z(P.z),-(hd)+PI,11)}
 
 /* ---------- main update ---------- */
 function update(dt,t){if(P.pv>P.hp&&!P.dead&&rpg.sk.tou)P.hp+=(P.pv-P.hp)*rpg.sk.tou*.04;if(P.pv>P.hp&&ar>0&&!P.dead){const a=Math.min(ar,(P.pv-P.hp)*.7);ar-=a;P.hp+=a}P.pv=P.hp;
- if(P.hp<=0&&!P.dead){P.dead=1;P.rt=t+3;say(['WASTED','SPLAT!','OOPS... YOU DIED','NICE TRY, CHAMP','THE GROUND WON','OUCH! THAT WAS MY LUNCH'][rnd()*6|0],3000);sfx.die();failM('',1)}
+ if(P.hp<=0&&!P.dead){P.dead=1;P.rid=0;P.sit=0;P.rt=t+3;say(['WASTED','SPLAT!','OOPS... YOU DIED','NICE TRY, CHAMP','THE GROUND WON','OUCH! THAT WAS MY LUNCH'][rnd()*6|0],3000);sfx.die();failM('',1)}
  if(P.dead){if(t>P.rt){P.dead=0;P.hp=100;let hq=null,hd=1e9;for(const q of HST){const d=Math.hypot(q.x-P.x,q.z-P.z);if(d<hd){hd=d;hq=q}}if(hq){P.x=hq.x+sin(hq.ry)*7;P.z=hq.z+cos(hq.ry)*7;shopLock=1;lkx=P.x;lkz=P.z;say('\u{1F3E5} Treated at the hospital  -$200',2600)}else{P.x=6;P.z=10}P.car=null;P.g.visible=true;P.g.position.y=0;P.y=0;P.vy=0;heat=0;money=Math.max(0,money-200)}audioTick(t);smokeUpdate(dt);cam(t);return}
  if(inHome){homeTick(dt,t);return}
  if(CUT){jumpReq=0;fireOn=0;jx=jy=0}
  const kx=CUT?0:(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0),ky=CUT?0:(keys.KeyW||keys.ArrowUp?1:0)-(keys.KeyS||keys.ArrowDown?1:0);
  let mx=cl(kx+jx,-1,1),my=cl(ky+jy,-1,1);
  if(!CUT&&(fireOn||keys.KeyF||keys.KeyJ))fire(t);
- if(!P.car){
+ if(P.rid){}else if(!P.car){
   const l=Math.hypot(mx,my);if(l>1){mx/=l;my/=l}
   const run=keys.ShiftLeft||Math.hypot(jx,jy)>.85,sp=(run?8.5*(1+rpg.sk.sta*.04):4.5)*(swim(P)?.55:1)*((ME&&ME.adm&&admSpd)?3:1)*((ME&&ME.adm&&admFly)?2.2:1),dx=sin(yaw)*my-cos(yaw)*mx,dz=cos(yaw)*my+sin(yaw)*mx;
   if(l>.1){P.x+=dx*sp*dt;P.z+=dz*sp*dt;P.ang=tn(P.ang,Math.atan2(dx,dz),dt*12);P.ph+=dt*sp*1.6}
@@ -825,7 +826,7 @@ function update(dt,t){if(P.pv>P.hp&&!P.dead&&rpg.sk.tou)P.hp+=(P.pv-P.hp)*rpg.sk
   let ns=1e9;for(const s of SHOPS)ns=Math.min(ns,Math.hypot(P.x-s.x,P.z-s.z));
   let hs=null;for(const q of STN){const d=Math.hypot(P.x-q.x,P.z-q.z);ns=Math.min(ns,d);if(d<4.5)hs=q}
   if(shopLock){if(Math.hypot(P.x-lkx,P.z-lkz)>6)shopLock=0}else if(hs&&P.y<3){if(hs.t=='garage'){if(t-gmT>3){gmT=t;say('Drive a car in here to customize it',2000)}}else if(hs.t=='ammu')openShop();else if(INTK.has(hs.t))enterInt(hs);else openSt(hs.t)}else if(ns<4.5&&P.y<3){const gs_=SHOPS.find(q=>Math.hypot(P.x-q.x,P.z-q.z)<4.5);if(gs_)enterShop(gs_)}
- }else if(P.car.air){airFly(P.car,dt,t,mx,my)}else{
+ }else if(P.car.train){}else if(P.car.air){airFly(P.car,dt,t,mx,my)}else{
   const c=P.car;c.v+=my*(my*c.v<0?45:24)*dt;if(!my)c.v*=1-Math.min(1,1.2*dt);if(keys.Space&&!(c===myCar&&cu.fly)&&!admCF)c.v*=1-Math.min(1,3*dt);
   const nm_=nitroTick(c,dt);c.v=c.boat?cl(c.v,-6,20):cl(c.v,-9,(c.top||30)*(1+rpg.sk.drv*.03)*nm_*((admCS&&ME&&ME.adm)?2:1));if(nm_>1&&my>0)c.v+=30*dt;const av=Math.abs(c.v),hb=!!keys.Space&&av>10&&!c.boat,sr=(hb?2.9:1.9)*(1.25/(1+av/48));c.a-=mx*sr*dt*cl(c.v/6,-1,1);c.st=-mx*.5;if(hb&&mx){c.dr=t;c.v*=1-.25*dt;if(!(t<c.dsm)){c.dsm=t+.05;puff(c.x-sin(c.a)*1.5,.5,c.z-cos(c.a)*1.5,0,0)}}mv2(c,dt,1,t);if(!c.boat&&!(c.fy>0)){c.rl=(c.rl||0)+(mx*cl(av/30,0,1)*.07*(c.v<0?-1:1)-(c.rl||0))*Math.min(1,dt*6);c.g.rotation.z=c.rl}P.x=c.x;P.z=c.z;garageCheck(c,t);carShop(c,t)}
  for(const c of cars)if(c!==P.car&&!c.ai&&!c.go&&Math.abs(c.v)>.1){c.v*=1-Math.min(1,2*dt);mv2(c,dt,0,t)}
@@ -837,7 +838,7 @@ function update(dt,t){if(P.pv>P.hp&&!P.dead&&rpg.sk.tou)P.hp+=(P.pv-P.hp)*rpg.sk
   p.ph+=dt*(pan?12:6);const nr=dd<130;p.g.visible=nr;let by=gGY(p.x,p.z),b0=by;
   if(nr){if(dn){by=b0+Math.abs(sin(p.ph*.8))*.35;p.g.la.rotation.x=p.g.ra.rotation.x=-2.7+sin(p.ph)*.5;p.g.ll.rotation.x=sin(p.ph)*.5;p.g.rl.rotation.x=-sin(p.ph)*.5}else{walk(p.g,sin(p.ph)*.7);p.g.ra.rotation.x=pan?-2.8:0}}
   p.g.position.set(p.x,by,p.z);p.g.rotation.y=dn?p.ph*.5:p.a}
- aiTick(dt,t);waterTick(dt,t);airTick(dt,t);if(t-lastCrime>25)heat=0;
+ aiTick(dt,t);waterTick(dt,t);airTick(dt,t);trainTick(dt,t,mx,my);if(t-lastCrime>25)heat=0;
  const stars=heat>0?Math.min(3,Math.ceil(heat)):0,need=stars*2;
  cops.forEach((c,i)=>{if(i<need){if(!c.on&&t>c.rt)spawnCop(c,t);if(c.on)copAI(c,dt,t,stars)}else if(c.on){c.on=0;c.g.visible=false}});
  for(const o of offs)if(o.on||o.dead)offAI(o,dt,t,stars);
@@ -848,7 +849,7 @@ function update(dt,t){if(P.pv>P.hp&&!P.dead&&rpg.sk.tou)P.hp+=(P.pv-P.hp)*rpg.sk
  $('hpb').style.width=cl(P.hp,0,100)+'%';$('armb').style.width=cl(ar,0,100)+'%';$('st').textContent='★'.repeat(stars)+'☆'.repeat(3-stars);$('mo').textContent='$'+money;
  $('wi').textContent=(P.car?'':'[Q] ')+W[cw].n+(W[cw].am<0?'  ∞':'  '+W[cw].am);carHud(dt,t)}
 function cam(t){cam0(t);if(CUT)cutCam(t)}
-function cam0(t){{const sp=P.car?Math.abs(P.car.v||0):0,tf=65+Math.min(22,sp*.45)+(nitOn?8:0);C.fov+=(tf-C.fov)*.08;C.updateProjectionMatrix()}const o=P.car||P,d=P.car?(P.car.air?(P.car.heli?17:21):11+Math.min(3,Math.abs(P.car.v||0)*.08)):7,h=P.car?(P.car.air?6:3):2,ay=P.car?(P.car.air?P.car.y:((P.car.fy||0)>0?P.car.fy:Math.max(gh(P.car.x,P.car.z),SEA+.12))):(P.y>0?P.y:0);
+function cam0(t){{const sp=P.car?Math.abs(P.car.v||0):0,tf=65+Math.min(22,sp*.45)+(nitOn?8:0);C.fov+=(tf-C.fov)*.08;C.updateProjectionMatrix()}const o=P.car||P,d=P.car?(P.car.air?(P.car.heli?17:21):11+Math.min(3,Math.abs(P.car.v||0)*.08)):7,h=P.car?(P.car.air?6:3):2,ay=P.car?(P.car.train?P.car.ty:P.car.air?P.car.y:((P.car.fy||0)>0?P.car.fy:Math.max(gh(P.car.x,P.car.z),SEA+.12))):(P.y>0?P.y:0);
  if(P.car&&(Math.abs(P.car.v)>3||P.car.air)&&t-dragT>1.5)yaw=tn(yaw,P.car.a,.03);
  C.position.set(o.x-sin(yaw)*cos(pit)*d,h+ay+sin(pit)*d,o.z-cos(yaw)*cos(pit)*d);if(shake>.02){C.position.x+=(rnd()-.5)*shake*1.5;C.position.y+=(rnd()-.5)*shake;shake*=.92}else shake=0;
  {const mh=Math.max(gh(C.position.x,C.position.z),SEA)+1;if(!(P.car&&P.car.air)&&C.position.y<mh)C.position.y=mh}C.lookAt(o.x,2+ay,o.z);
@@ -2685,7 +2686,7 @@ function chute(gb){if(P.car||inHome||(admFly&&ME&&ME.adm)){para=0;return 0}
 
 /* ================= BODY REACTIONS: falling, tumbling, hit flinch, ragdoll death ================= */
 {P.g.rotation.order='YXZ';let rx=0,deadT=0,landT=-9,wasAir=0,hv=100,hitT=-9,tum=0;
- const _s6=stTick;stTick=function(dt){_s6(dt);if(!started||P.car||inHome||CUT){if(rx&&!P.car&&!inHome){P.g.rotation.x=0;P.g.scale.set(1,1,1);rx=0}return}
+ const _s6=stTick;stTick=function(dt){_s6(dt);if(!started||P.car||inHome||CUT||P.rid){if(rx&&!P.car&&!inHome&&!P.rid){P.g.rotation.x=0;P.g.scale.set(1,1,1);rx=0}return}
   const t=performance.now()/1000,g=P.g;
   if(P.hp<hv-2&&!P.dead)hitT=t;hv=P.hp;
   if(P.dead){if(!deadT)deadT=t;const f=Math.min(1,(t-deadT)/.45),fl=1-f;rx=1;
@@ -2968,9 +2969,9 @@ function bikes(t){const first=!bikes.t;if(t-(bikes.t||-99)>=60){bikes.t=t;BK.for
   for(let i=0;i<12;i++){const c=sps[i];if(c&&cars.includes(c)&&!c.xp)continue;const l=(i*5%7)-3,sd=i%2?14.5:-14.5,al=-210+((i*61)%420);sps[i]=i%2?mkSuper(i%5,al,80*l+sd,PI/2,0):mkSuper(i%5,80*l+sd,al,0,0)}
   for(let i=0;i<8;i++){const c=asp[i];if(c&&cars.includes(c)&&!c.xp)continue;spLane(i)}}
  for(const c of bks.concat(sps,plz))if(c&&c!==P.car)c.g.visible=Math.hypot(c.x-P.x,c.z-P.z)<170}
-function tick(){const t=now(),dt=Math.min(.05,t-lt);lt=t;if(!started||BANNED)return;ld();bikes(t);{const pc=P.car;if(X.rb!==pc){if(X.rb&&X.rb.rg)X.rb.rg.visible=false;X.rb=pc;if(pc&&pc.rg){pc.rg.visible=false;const sh=P.g.children[0].material.color.getHex(),pn=P.g.ll.children[0].material.color.getHex(),q=pc.rg.children;[0,3,4].forEach(i=>q[i].material.color.setHex(sh));[5,6].forEach(i=>q[i].material.color.setHex(pn))}}}{const c=P.car,g=P.g;if(c&&!c.air&&!P.dead&&!inHome&&!CUT){const bk=c.bike,sp=c.sup,bt=c.boat,sc=bk||bt?1:sp?.5:.6,oy=bk?.13:bt?0:sp?-.02:(c.dm?c.dm[2]-1.62:.18),lx=bk||bt?0:-.5,lz=bk?-.35:bt?-.6:-.2,a=c.a;X.sat=1;g.visible=true;g.scale.setScalar(sc);g.rotation.set(0,a,0);
+function tick(){const t=now(),dt=Math.min(.05,t-lt);lt=t;if(!started||BANNED)return;ld();bikes(t);{const pc=P.car;if(X.rb!==pc){if(X.rb&&X.rb.rg)X.rb.rg.visible=false;X.rb=pc;if(pc&&pc.rg){pc.rg.visible=false;const sh=P.g.children[0].material.color.getHex(),pn=P.g.ll.children[0].material.color.getHex(),q=pc.rg.children;[0,3,4].forEach(i=>q[i].material.color.setHex(sh));[5,6].forEach(i=>q[i].material.color.setHex(pn))}}}{const c=P.car,g=P.g;if(c&&!c.air&&!P.dead&&!inHome&&!CUT){const bk=c.bike,sp=c.sup,bt=c.boat,sc=bk||bt?1:sp?.5:.6,oy=bk?.13:bt?0:sp?-.02:(c.dm?c.dm[2]-1.62:.18),lx=bk||bt?0:-.5,lz=bk?-.35:bt?-.6:-.2,a=c.a;X.sat=1;g.visible=!!(bk||bt);g.scale.setScalar(sc);g.rotation.set(0,a,0);
  g.position.set(c.x+lx*cos(a)+lz*sin(a),c.g.position.y+oy,c.z-lx*sin(a)+lz*cos(a));g.ll.rotation.x=g.rl.rotation.x=-1.4;g.la.rotation.x=g.ra.rotation.x=-1.15}
- else if(X.sat){X.sat=0;g.scale.setScalar(1);g.rotation.x=0;g.ll.rotation.x=g.rl.rotation.x=g.la.rotation.x=g.ra.rotation.x=0}}
+ else if(X.sat){X.sat=0;g.scale.setScalar(1);g.rotation.x=0;g.ll.rotation.x=g.rl.rotation.x=g.la.rotation.x=g.ra.rotation.x=0}if(c&&!inHome&&!CUT&&!c.bike&&!c.boat)g.visible=false}
  /* nicer traffic cars: bumpers, grille, mirrors, rims */
  {let n=0;for(const c of cars){if(n>=6)break;if(c.dressed||c.sup||c.bike||c.boat||c.air||!c.dm)continue;c.dressed=1;n++;const g=c.g,w=c.dm[0],l=c.dm[1],bm=(ww,hh,dd,cc,px,py,pz)=>box(ww,hh,dd,cc,px,py,pz,g);
   bm(w-.1,.22,.18,0x1a1a1e,0,.45,l/2+.08);bm(w-.1,.22,.18,0x1a1a1e,0,.45,-l/2-.08);bm(w*.45,.2,.06,0x222226,0,.62,l/2+.04);
@@ -3090,5 +3091,151 @@ try{const og=gh;window.gh=function(x,z){const h=og(x,z),dx=Math.max(Math.abs(x-P
  rows.splice(rows.length-2,0,['plz','\u{1F3C6} Go to Car & Tree plaza']);panel.innerHTML=rows.map(r=>'<button data-k="'+r[0]+'">'+r[1]+'</button>').join('');
 }catch(e){console.warn('VICES+ plaza:',e)}
 }catch(e){console.warn('VICES+ add-on failed:',e)}})();
+
+/* ================= TRAIN: elevated loop line over the city roads, 4 stations, walk-in interior ================= */
+/*TRAIN-LOGIC-START*/
+const RAILP=(()=>{const H=160,R=34,Y=9,q=[],pts=[];
+ for(let x=-(H-R);x<H-R;x+=1)q.push([x,-H]);
+ {const cx=H-R,cz=-H+R,n=Math.ceil(R*PI/2);for(let i=0;i<n;i++){const f=i/n*PI/2;q.push([cx+R*sin(f),cz-R*cos(f)])}}
+ for(let k=0;k<4;k++)for(const p of q){let X=p[0],Z=p[1];for(let r=0;r<k;r++){const t=X;X=-Z;Z=t}pts.push([X,Z])}
+ const cum=[0];for(let i=1;i<pts.length;i++)cum.push(cum[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));
+ const len=cum[pts.length-1]+Math.hypot(pts[0][0]-pts[pts.length-1][0],pts[0][1]-pts[pts.length-1][1]);
+ function at(s){s=((s%len)+len)%len;let lo=0,hi=pts.length-1;while(lo<hi){const m=(lo+hi+1)>>1;if(cum[m]<=s)lo=m;else hi=m-1}
+  const a=pts[lo],b=pts[(lo+1)%pts.length],d=(lo+1<pts.length?cum[lo+1]:len)-cum[lo],f=d>0?(s-cum[lo])/d:0;return[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f]}
+ return{pts,cum,len,Y,at}})();
+function trainPose(s,span){const p=RAILP.at(s),b=RAILP.at(s-span),f=RAILP.at(s+span);return{x:p[0],z:p[1],a:Math.atan2(f[0]-b[0],f[1]-b[1])}}
+const TLEN=61.1,TOFF=[9.1,24.1,39.1,54.1],DSU=4.3,TFL=RAILP.Y+1.1;
+/* passenger seats (lx = left/right, u = metres behind the nose of the train) */
+const TSEATS=[];for(let j=1;j<4;j++)for(const z of[-5,-1.7,1.7,5])for(const lx of[-1,1])TSEATS.push({lx,u:TOFF[j]-z,j,z});
+const TNPC=TSEATS.find(s=>s.j==1&&s.z==1.7&&s.lx==-1);
+const TSTN=[];{let bi=0,bd=1e9;RAILP.pts.forEach((p,i)=>{const d=Math.hypot(p[0]-40,p[1]+160);if(d<bd){bd=d;bi=i}});
+ const s0=RAILP.cum[bi];for(let k=0;k<4;k++){const s=s0+k*RAILP.len/4,p=trainPose(s,2);
+  TSTN.push({k,s,stop:s+TLEN/2,x:p.x,z:p.z,a:p.a,tx:p.x+cos(p.a)*10.7,tz:p.z-sin(p.a)*10.7})}}
+const TRAIN={S:TSTN[0].stop-90,v:0,dw:0,nx:TSTN[0].stop,hint:0,t:0,px:null,pz:null,dr:'seat',drk:0,dwi:0,dlx:0,du:DSU,dph:0,drvG:null,
+ cab:{x:0,z:0,a:0,v:0,y:RAILP.Y,ty:RAILP.Y,fy:0,air:0,train:1,g:null,hp:9999,cr:0,ex:3}};
+P.rid=0;P.sit=0;P.lx=0;P.u=TOFF[1];
+const trWrap=d=>((d%RAILP.len)+RAILP.len*1.5)%RAILP.len-RAILP.len/2;
+const trainAt=s=>TRAIN.v<1.5&&Math.abs(trWrap(TRAIN.S-s.stop))<5;
+function trainEta(s){const d=(((s.stop-TRAIN.S)%RAILP.len)+RAILP.len)%RAILP.len;return Math.max(1,Math.round(d/16+Math.max(0,TRAIN.dw-TRAIN.t)+Math.floor(d/(RAILP.len/4))*14))}
+function trainPlace(g,lx,u,y){const p=trainPose(TRAIN.S-u,2);g.position.set(p.x+cos(p.a)*lx,y,p.z-sin(p.a)*lx);g.rotation.y=p.a;return p}
+const sitPose=g=>{g.ll.rotation.x=g.rl.rotation.x=-1.4;g.la.rotation.x=g.ra.rotation.x=-.8;g.ll.rotation.z=g.rl.rotation.z=g.la.rotation.z=g.ra.rotation.z=0};
+/* the driver NPC: sits at the controls, gets out when you press E, walks to a passenger seat */
+function trainDriver(dt){const D=TRAIN.drvG;if(!D)return;
+ if(!(P.rid||P.car===TRAIN.cab))TRAIN.dr='seat';
+ if(TRAIN.dr==='seat'){trainPlace(D,0,DSU,TFL-.4);sitPose(D)}
+ else if(TRAIN.dr==='stand'){TRAIN.drk+=dt;trainPlace(D,0,DSU,TFL);D.ll.rotation.x=D.rl.rotation.x=D.la.rotation.x=D.ra.rotation.x=0;if(TRAIN.drk>.8){TRAIN.dr='walk';TRAIN.dwi=0;TRAIN.dlx=0;TRAIN.du=DSU}}
+ else if(TRAIN.dr==='walk'){const wp=[[0,TNPC.u],[TNPC.lx,TNPC.u]],w=wp[TRAIN.dwi],dx=w[0]-TRAIN.dlx,du=w[1]-TRAIN.du,d=Math.hypot(dx,du),st=2.4*dt;
+  if(d<=st){TRAIN.dlx=w[0];TRAIN.du=w[1];if(++TRAIN.dwi>=wp.length)TRAIN.dr='away'}else{TRAIN.dlx+=dx/d*st;TRAIN.du+=du/d*st}
+  TRAIN.dph+=dt*8;const p=trainPlace(D,TRAIN.dlx,TRAIN.du,TFL),sw=sin(TRAIN.dph)*.7;D.rotation.y=p.a+(du>.05?PI:0);
+  D.ll.rotation.x=sw;D.rl.rotation.x=-sw;D.la.rotation.x=-sw;D.ra.rotation.x=sw}
+ else{trainPlace(D,TNPC.lx,TNPC.u,TFL-.4);sitPose(D)}}
+/* you walking / sitting inside the moving train */
+function trainRide(dt,t,mx,my){
+ if(TRAIN.px!=null&&Math.hypot(P.x-TRAIN.px,P.z-TRAIN.pz)>6){P.rid=0;P.sit=0;return}
+ jumpReq=0;P.vy=0;const g=P.g;
+ const l=Math.hypot(mx,my);if(l>1){mx/=l;my/=l}
+ let p=trainPose(TRAIN.S-P.u,2),mv=0;
+ if(!P.sit){const run=keys.ShiftLeft||Math.hypot(jx,jy)>.85,sp=run?6.5:3.4,dx=sin(yaw)*my-cos(yaw)*mx,dz=cos(yaw)*my+sin(yaw)*mx;
+  if(l>.1){mv=1;const al=dx*sin(p.a)+dz*cos(p.a),sd=dx*cos(p.a)-dz*sin(p.a);P.u=cl(P.u-al*sp*dt,3.6,60.4);P.lx=cl(P.lx+sd*sp*dt,-1.3,1.3);P.ang=tn(P.ang,Math.atan2(dx,dz),dt*12);P.ph+=dt*sp*1.6}}
+ p=trainPose(TRAIN.S-P.u,2);
+ P.x=p.x+cos(p.a)*P.lx;P.z=p.z-sin(p.a)*P.lx;P.y=TFL;
+ g.rotation.set(0,P.sit?p.a:P.ang,0);g.scale.set(1,1,1);if(!P.sit)P.ang=P.ang;
+ g.position.set(P.x,P.sit?TFL-.4:TFL,P.z);
+ if(P.sit)sitPose(g);
+ else{const sw=mv?sin(P.ph)*.8:0;walk(g,sw);g.ra.rotation.x=t-lastF<.25?-1.4:-sw;g.ll.rotation.z=g.rl.rotation.z=g.la.rotation.z=g.ra.rotation.z=0}
+ TRAIN.px=P.x;TRAIN.pz=P.z}
+function trainTick(dt,t,mx,my){
+ TRAIN.t=t;if(P.dead){P.rid=0;P.sit=0}
+ const c=TRAIN.cab,L4=RAILP.len/4,drv=P.car===c&&!P.dead;
+ while(TRAIN.nx-TRAIN.S<-.5)TRAIN.nx+=L4;
+ if(drv){
+  if(my>0)TRAIN.v+=5*my*dt;else if(my<0)TRAIN.v-=14*dt;
+  if(keys.Space)TRAIN.v-=20*dt;
+  TRAIN.v=cl(TRAIN.v*(1-.015*dt),0,36)}
+ else if(t<TRAIN.dw)TRAIN.v=0;
+ else{const ds=TRAIN.nx-TRAIN.S;
+  if(ds<.6&&TRAIN.v<1.7){TRAIN.S=TRAIN.nx;TRAIN.v=0;TRAIN.dw=t+14;TRAIN.nx+=L4}
+  else{const vt=Math.min(24,Math.sqrt(2*3.5*Math.max(0,ds-.2)));TRAIN.v=TRAIN.v>vt?Math.max(vt,TRAIN.v-7*dt):Math.min(vt,TRAIN.v+3*dt)}}
+ TRAIN.S+=TRAIN.v*dt;
+ const p=trainPose(TRAIN.S-TOFF[0],4);c.x=p.x;c.z=p.z;c.a=p.a;c.v=TRAIN.v;
+ if(drv){P.x=c.x;P.z=c.z;P.y=RAILP.Y;P.vy=0}
+ else if(P.rid)trainRide(dt,t,mx,my);
+ else if(!P.car&&!P.dead&&t>TRAIN.hint){for(const s of TSTN){if(Math.hypot(P.x-s.tx,P.z-s.tz)<9&&P.y<3){TRAIN.hint=t+3.5;
+  say(trainAt(s)?'\uD83D\uDE86 Train is here \u2013 press E to board':'\uD83D\uDE86 Next train in ~'+trainEta(s)+'s \u2013 wait here',2200);break}}}
+ trainDriver(dt);
+ if(typeof trainVis=='function')trainVis()}
+function trainAct(){
+ if(P.dead)return 0;const c=TRAIN.cab;
+ if(P.car===c){
+  if(TRAIN.v>2){say('\uD83D\uDE86 Stop the train first (S / SPACE to brake)',1600);return 1}
+  P.car=null;P.rid=1;P.sit=0;P.lx=.95;P.u=DSU+2.2;TRAIN.px=null;TRAIN.dr='seat';P.g.visible=true;say('\uD83D\uDE86 You left the driver seat',1500);return 1}
+ if(P.car)return 0;
+ if(P.rid){
+  if(P.sit){P.sit=0;P.lx=P.lx>0?.4:-.4;say('\uD83D\uDE86 You stood up',1200);return 1}
+  if(Math.hypot(P.lx,P.u-DSU)<1.7){
+   if(TRAIN.dr==='seat'){TRAIN.dr='stand';TRAIN.drk=0;say('\uD83D\uDE86 The driver gets out \u2013 press E again to sit in the driver seat',3500);return 1}
+   if(TRAIN.dr!=='stand'){P.rid=0;P.sit=0;P.car=c;P.g.visible=false;say('\uD83D\uDE86 You are the driver! W speed up \u00B7 S / SPACE brake \u00B7 E leave the seat',4800)}
+   return 1}
+  for(const s of TSEATS){if(s===TNPC&&TRAIN.dr!=='seat')continue;if(Math.hypot(P.lx-s.lx,P.u-s.u)<1.3){P.sit=1;P.lx=s.lx;P.u=s.u;say('\uD83D\uDE86 Sitting \u2013 press E to stand up',1800);return 1}}
+  let ex=null;for(const s of TSTN)if(Math.abs(trWrap(TRAIN.S-TLEN/2-s.s))<26)ex=s;
+  if(TRAIN.v>2){say('\uD83D\uDE86 The train is moving \u2013 E near a seat to sit, or near the driver seat',2200);return 1}
+  if(!ex){say('\uD83D\uDE86 You can only get off at a station',1600);return 1}
+  P.rid=0;P.sit=0;P.x=ex.x+cos(ex.a)*7.6;P.z=ex.z-sin(ex.a)*7.6;P.y=0;P.vy=0;P.ang=ex.a;P.g.visible=true;say('\uD83D\uDE86 You got off the train',1500);return 1}
+ for(const s of TSTN)if(Math.hypot(P.x-s.tx,P.z-s.tz)<8.5&&P.y<3){
+  if(!trainAt(s)){say('\uD83D\uDE86 Next train in ~'+trainEta(s)+'s \u2013 wait here',2000);return 1}
+  P.rid=1;P.sit=0;P.lx=0;P.u=TOFF[1];TRAIN.px=null;P.g.visible=true;P.vy=0;yaw=trainPose(TRAIN.S-TOFF[1],2).a;P.ang=yaw;
+  say('\uD83D\uDE86 Walk inside \u00B7 E near a seat to sit \u00B7 E at the driver seat (front) to drive',5000);return 1}
+ return 0}
+/*TRAIN-LOGIC-END*/
+
+/* ---- train visuals: viaduct, rails, pillars, stations, hollow train cars with seats + driver ---- */
+const TCARS=[],TROOF=[];
+{const Y=RAILP.Y,N=Math.floor(RAILP.len/6),D=new T.Object3D(),
+ inst=(w,h,d,c,n,sh)=>{const m=new T.InstancedMesh(new T.BoxGeometry(w,h,d),mat(c),n);m.frustumCulled=false;m.castShadow=!!sh;m.receiveShadow=true;S.add(m);return m},
+ put=(m,i,p,lx,y)=>{D.position.set(p.x+cos(p.a)*lx,y,p.z-sin(p.a)*lx);D.rotation.set(0,p.a,0);D.updateMatrix();m.setMatrixAt(i,D.matrix)};
+ const deck=inst(6.4,.6,6.6,0x6b6f76,N,1),rl=inst(.18,.22,6.6,0xc4c8d0,N),rr=inst(.18,.22,6.6,0xc4c8d0,N),sl=inst(2.8,.14,.5,0x3a2a1c,N),rail=inst(.3,.9,6.6,0x55585e,N),rail2=inst(.3,.9,6.6,0x55585e,N);
+ for(let i=0;i<N;i++){const p=trainPose((i+.5)*RAILP.len/N,3);put(deck,i,p,0,Y-.3);put(rl,i,p,-.75,Y+.11);put(rr,i,p,.75,Y+.11);put(sl,i,p,0,Y+.07);put(rail,i,p,3.0,Y+.45);put(rail2,i,p,-3.0,Y+.45)}
+ [deck,rl,rr,sl,rail,rail2].forEach(m=>m.instanceMatrix.needsUpdate=true);
+ /* pillars: only on road centre lines and away from junctions so traffic never hits them */
+ const ps=[];for(let s=0;s<RAILP.len;s+=14){const p=trainPose(s,2),mx=((p.x%80)+80)%80,mz=((p.z%80)+80)%80,dx=Math.min(mx,80-mx),dz=Math.min(mz,80-mz);
+  if((dx<4||dz<4)&&Math.hypot(dx,dz)>16)ps.push(p)}
+ const pil=inst(1.8,Y-.6,1.8,0x8a8d93,ps.length,1),cap=inst(5.2,.6,1.9,0x6b6f76,ps.length,1);
+ ps.forEach((p,i)=>{D.position.set(p.x,(Y-.6)/2,p.z);D.rotation.set(0,p.a,0);D.updateMatrix();pil.setMatrixAt(i,D.matrix);D.position.set(p.x,Y-.9,p.z);D.updateMatrix();cap.setMatrixAt(i,D.matrix);B.push({x:p.x,z:p.z,w:.9,d:.9,h:Y-.6})});
+ pil.instanceMatrix.needsUpdate=cap.instanceMatrix.needsUpdate=true;
+ /* stations */
+ const cv=document.createElement('canvas');cv.width=256;cv.height=96;{const x=cv.getContext('2d');x.fillStyle='#d8452e';x.fillRect(0,0,256,96);x.fillStyle='#fff';x.fillRect(6,6,244,84);x.fillStyle='#d8452e';x.fillRect(10,10,236,76);x.fillStyle='#fff';x.font='bold 44px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('\uD83D\uDE86 TRAIN',128,50)}
+ const tex=new T.CanvasTexture(cv);
+ for(const s of TSTN){const g=new T.Group();g.position.set(s.x,0,s.z);g.rotation.y=s.a;S.add(g);const L=(w,h,d,c,x,y,z)=>box(w,h,d,c,x,y,z,g);
+  L(4.2,.5,66,0xa9adb4,4.7,Y+.25,0);L(.3,.1,66,0xffd23c,2.75,Y+.53,0);
+  for(const z of[-28,-9,9,28])L(.3,4,.3,0x55585e,6.5,Y+2.5,z);
+  L(4.8,.25,62,0xd8452e,4.8,Y+4.6,0);
+  L(3.4,.5,3.2,0x8c9097,8.4,Y+.25,0);
+  L(1.8,Y+3,3.4,0xd8452e,10.7,(Y+3)/2,0);L(.1,2.6,1.4,0x1a1a1e,11.65,1.3,0);
+  const sg=new T.Mesh(new T.PlaneGeometry(4.2,1.55),new T.MeshBasicMaterial({map:tex}));sg.position.set(11.66,Y+1.2,0);sg.rotation.y=PI/2;g.add(sg);
+  const bm=new T.Mesh(new T.CylinderGeometry(.9,.9,70,12,1,true),new T.MeshBasicMaterial({color:0xffa020,transparent:true,opacity:.28,depthWrite:false,side:T.DoubleSide}));bm.position.set(s.tx,35,s.tz);S.add(bm)}
+ /* hollow train cars: floor, low side walls with open windows, roof (hidden while you ride inside), seats */
+ const mk=(loco,col,j)=>{const g=new T.Group(),len=loco?13:14,h=len/2,b=(w,hh,d,c,x,y,z)=>box(w,hh,d,c,x,y,z,g);
+  b(3.3,.2,len+1.6,0x55585e,0,1.0,0);                                   /* floor (a little longer to bridge the gaps) */
+  for(const sx of[-1,1]){b(.12,.9,len,col,sx*1.6,1.55,0);b(.14,.22,len,0xffcc00,sx*1.64,1.75,0);b(.12,.4,len,col,sx*1.6,3.7,0);
+   for(let z=-h+.15;z<=h-.1;z+=len/4)b(.14,1.6,.3,col,sx*1.6,2.75,z)}
+  const rf=b(3.3,.25,len,0xe6e8ec,0,4.0,0);TROOF.push(rf);
+  b(2.4,.5,3.2,0x2a2a2e,0,.7,h-3);b(2.4,.5,3.2,0x2a2a2e,0,.7,-h+3);        /* bogies */
+  for(const z of loco?[-h]:[-h,h]){b(1.05,2.9,.15,col,-1.125,2.55,z);b(1.05,2.9,.15,col,1.125,2.55,z);b(1.2,.5,.15,col,0,3.75,z)}
+  if(loco){
+   b(3.3,.9,.15,col,0,1.55,h);b(3.3,.4,.15,col,0,3.7,h);                    /* front wall + windscreen */
+   const gl=new T.Mesh(new T.BoxGeometry(3.0,1.6,.05),new T.MeshLambertMaterial({color:0x7aa0c0,transparent:true,opacity:.3}));gl.position.set(0,2.75,h);g.add(gl);
+   b(3.2,2.3,2.6,col,0,2.0,h+1.3);b(.6,.45,.1,0xfff3b0,-.9,1.6,h+2.62);b(.6,.45,.1,0xfff3b0,.9,1.6,h+2.62);
+   b(2.6,.9,.6,0x2c2f36,0,1.65,h-.7);b(1.6,.5,.05,0x39d98a,0,2.25,h-.98);b(.3,.5,.3,0xd33,0-.8,2.0,h-.7);   /* control desk, screen, red lever */
+   const dz=TOFF[0]-DSU;b(.9,.45,.9,0x1d1f24,0,1.325,dz);b(.9,.8,.12,0x1d1f24,0,1.9,dz-.5)}        /* driver seat */
+  else for(const s of TSEATS)if(s.j==j){const lx=s.lx;b(.9,.45,.9,0x2b3a6a,lx,1.325,s.z);b(.12,.8,.9,0x2b3a6a,lx*1.42,1.9,s.z)}
+  S.add(g);return g};
+ TCARS.push(mk(1,0xd8452e,0));for(let i=1;i<4;i++)TCARS.push(mk(0,0x2f6fd0,i));
+ TRAIN.cab.g=TCARS[0];TRAIN.drvG=human(0x2a5db8,0x222233,0xffd23c)}
+function trainVis(){const Y=RAILP.Y;for(let j=0;j<TCARS.length;j++){const p=trainPose(TRAIN.S-TOFF[j],4);TCARS[j].position.set(p.x,Y,p.z);TCARS[j].rotation.y=p.a}
+ const hide=!!P.rid;for(const r of TROOF)r.visible=!hide}
+function trainMap(c,X,Z){c.save();c.strokeStyle='rgba(255,150,40,.9)';c.lineWidth=3;c.setLineDash([8,5]);c.beginPath();RAILP.pts.forEach((p,i)=>{if(i%4)return;const x=X(p[0]),y=Z(p[1]);i?c.lineTo(x,y):c.moveTo(x,y)});c.closePath();c.stroke();c.restore();
+ for(const s of TSTN){dot(c,X(s.tx),Z(s.tz),'#ff9a2a',8);c.fillStyle='#000';c.font='bold 11px Arial';c.fillText('T',X(s.tx),Z(s.tz)+1)}dot(c,X(TRAIN.cab.x),Z(TRAIN.cab.z),'#fff',6)}
+trainVis();
+
 </script>
 </body></html>
